@@ -12,32 +12,48 @@ export default function Header() {
   useEffect(() => {
     const now = new Date();
     setDateStr(now.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }));
+    
+    // Initialize theme from localStorage or system setting
+    const savedTheme = localStorage.getItem('ugatuzi_theme');
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      setDarkMode(true);
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
   }, []);
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-    }
-  }, [darkMode]);
+  const toggleTheme = () => {
+    setDarkMode(prev => {
+      const next = !prev;
+      if (next) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('ugatuzi_theme', 'dark');
+      } else {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('ugatuzi_theme', 'light');
+      }
+      return next;
+    });
+  };
 
   return (
     <header className="border-b border-[var(--color-rule-strong)]">
       <TickerBar />
       
       {/* Utility Bar */}
-      <div className="flex items-center justify-between px-6 py-2 text-[11px] text-[var(--color-ink-tertiary)] border-b border-[var(--color-rule)]">
-        <span className="uppercase tracking-widest">{dateStr || 'Nairobi, Kenya'}</span>
-        <div className="flex items-center gap-4">
-          <span className="hidden sm:inline font-mono">Nairobi, Kenya</span>
+      <div className="flex items-center justify-between px-4 sm:px-6 py-2 text-[11px] text-[var(--color-ink-tertiary)] border-b border-[var(--color-rule)]">
+        <span className="uppercase tracking-widest text-[10px] sm:text-[11px] font-mono">{dateStr || 'Nairobi, Kenya'}</span>
+        <div className="flex items-center gap-3">
+          <span className="hidden sm:inline font-mono text-[10px] uppercase tracking-wider">Nairobi, Kenya</span>
           <button
-            onClick={() => setDarkMode(!darkMode)}
+            onClick={toggleTheme}
             aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-            className="flex items-center gap-1.5 px-3 py-2.5 min-h-[44px] min-w-[44px] rounded-xs border border-[var(--color-rule)] text-[var(--color-ink-secondary)] hover:text-[var(--color-ink)] active:scale-95 transition-all cursor-pointer touch-manipulation"
+            className="theme-toggle-btn"
           >
-            {darkMode ? <Sun size={13} /> : <Moon size={13} />}
-            <span className="text-[10px] font-bold uppercase tracking-wider">{darkMode ? 'Light' : 'Dark'}</span>
+            <span className="theme-toggle-icon-wrap">
+              {darkMode ? <Sun size={12} className="stroke-[2.5]" /> : <Moon size={12} className="stroke-[2.5]" />}
+            </span>
+            <span>{darkMode ? 'Light' : 'Dark'}</span>
+            <span className="theme-toggle-pill" />
           </button>
         </div>
       </div>

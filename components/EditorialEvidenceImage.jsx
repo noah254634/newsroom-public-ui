@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import { resolveImageUrl } from '../lib/imageUtils';
 

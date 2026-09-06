@@ -170,7 +170,15 @@ export default function CountiesHub() {
 
   const filtered = articles.filter(art => {
     if (selectedCounty === 'All') return true;
-    return (art.county || 'National').toLowerCase() === selectedCounty.toLowerCase();
+    const target = selectedCounty.toLowerCase().trim();
+    const artCounty = (art.county || '').toLowerCase().trim();
+    
+    if (artCounty && (artCounty.includes(target) || target.includes(artCounty))) {
+      return true;
+    }
+
+    const textToSearch = `${art.headline || ''} ${art.title || ''} ${art.summary || ''} ${art.deck || ''}`.toLowerCase();
+    return textToSearch.includes(target);
   });
 
   const countyData = selectedCounty !== 'All' ? COUNTY_DATA[selectedCounty] : null;

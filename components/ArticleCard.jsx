@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Clock, MapPin } from 'lucide-react';
@@ -18,7 +20,7 @@ export default function ArticleCard({ article }) {
   const getFallbackImage = () => {
     const titleLower = (headline || '').toLowerCase();
     const catLower = (category || '').toLowerCase();
-    if (titleLower.includes('nairobi') || county.toLowerCase() === 'nairobi') {
+    if (titleLower.includes('nairobi') || county.toLowerCase().includes('nairobi')) {
       return '/nairobi_skyline.png';
     }
     if (titleLower.includes('central bank') || titleLower.includes('monetary') || catLower === 'finance') {

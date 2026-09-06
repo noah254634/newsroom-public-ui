@@ -146,3 +146,76 @@ body {
   animation: progress-fill linear forwards;
   /* duration is set inline via style.animationDuration */
 }
+
+/* ── Responsive Theme Switcher Control ────────────────────── */
+.theme-toggle-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 12px;
+  min-height: 36px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-rule-strong);
+  background-color: var(--color-paper-subtle);
+  color: var(--color-ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--color-ink-tertiary);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.25s ease, color 0.25s ease;
+}
+
+[data-theme="dark"] .theme-toggle-icon-wrap {
+  background-color: rgba(245, 158, 11, 0.2);
+  color: #F59E0B;
+  transform: rotate(360deg);
+}
+
+:root:not([data-theme="dark"]) .theme-toggle-icon-wrap {
+  background-color: rgba(30, 58, 138, 0.12);
+  color: #1E3A8A;
+  transform: rotate(0deg);
+}
+
+.theme-toggle-pill {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] .theme-toggle-pill {
+  background-color: #F59E0B;
+  box-shadow: 0 0 6px rgba(245, 158, 11, 0.85);
+}
+
+:root:not([data-theme="dark"]) .theme-toggle-pill {
+  background-color: #059669;
+  box-shadow: 0 0 6px rgba(5, 150, 105, 0.65);
+}
+
