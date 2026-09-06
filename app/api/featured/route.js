@@ -16,7 +16,7 @@ export async function GET() {
         'User-Agent': 'UgatuziTerminal/1.0',
       },
       next: { revalidate: 15 },
-      signal: AbortSignal.timeout(5000),
+      signal: AbortSignal.timeout(15000),
     });
     if (res.ok) {
       const data = await res.json();
