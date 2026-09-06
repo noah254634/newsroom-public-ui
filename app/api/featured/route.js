@@ -10,6 +10,7 @@ const BACKEND = process.env.BACKEND_API_URL || 'http://127.0.0.1:8000/api';
 export async function GET() {
   try {
     const res = await fetch(`${BACKEND}/published/featured`, {
+      headers: { 'ngrok-skip-browser-warning': 'true' },
       next: { revalidate: 15 },
       signal: AbortSignal.timeout(5000),
     });

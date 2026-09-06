@@ -21,7 +21,7 @@ export async function GET(request) {
     return new NextResponse('Missing url parameter', { status: 400 });
   }
 
-  // Security: allow proxying backend upload URLs
+  // Allow proxying image URLs over http or https
   let parsedUrl;
   try {
     parsedUrl = new URL(imageUrl);
@@ -29,10 +29,8 @@ export async function GET(request) {
     return new NextResponse('Invalid URL', { status: 400 });
   }
 
-  const host = parsedUrl.host || '';
-  const isBackend = host.includes(':8000') || host === 'localhost' || host === '127.0.0.1' || parsedUrl.pathname.includes('/uploads/');
-  if (!isBackend) {
-    return new NextResponse('Forbidden: external image hosts not allowed', { status: 403 });
+  if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') {
+    return new NextResponse('Invalid URL protocol', { status: 400 });
   }
 
   try {

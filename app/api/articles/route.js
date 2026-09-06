@@ -11,7 +11,7 @@ export async function GET(request) {
     : `${BACKEND}/published`;
 
   try {
-    const res = await fetch(url, { cache: 'no-store' });
+    const res = await fetch(url, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } });
     if (!res.ok) {
       return Response.json(
         { error: `Backend returned ${res.status}` },
