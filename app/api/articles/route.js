@@ -12,16 +12,12 @@ export async function GET(request) {
 
   try {
     const res = await fetch(url, { cache: 'no-store', headers: { 'ngrok-skip-browser-warning': 'true' } });
-    if (!res.ok) {
-      return Response.json(
-        { error: `Backend returned ${res.status}` },
-        { status: res.status }
-      );
+    if (res.ok) {
+      const data = await res.json();
+      return Response.json(data);
     }
-    const data = await res.json();
-    return Response.json(data);
   } catch (err) {
     console.error('[API /api/articles] fetch failed:', err.message);
-    return Response.json({ error: 'Failed to reach backend' }, { status: 503 });
   }
+  return Response.json([]);
 }

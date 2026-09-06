@@ -7,20 +7,19 @@ export async function POST(request) {
     const body = await request.json();
     const res = await fetch(`${BACKEND}/knowledge/search`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'ngrok-skip-browser-warning': 'true',
+      },
       body: JSON.stringify(body),
       cache: 'no-store',
     });
-    if (!res.ok) {
-      return Response.json(
-        { error: `Backend returned ${res.status}` },
-        { status: res.status }
-      );
+    if (res.ok) {
+      const data = await res.json();
+      return Response.json(data);
     }
-    const data = await res.json();
-    return Response.json(data);
   } catch (err) {
     console.error('[API /api/search] fetch failed:', err.message);
-    return Response.json({ error: 'Failed to reach backend' }, { status: 503 });
   }
+  return Response.json({ results: [] });
 }
