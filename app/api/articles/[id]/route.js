@@ -1,4 +1,4 @@
-const BACKEND = process.env.BACKEND_API_URL || 'http://127.0.0.1:8000/api';
+import { getBackendUrl } from '../../../../lib/api';
 
 export const dynamic = 'force-dynamic';
 
@@ -6,7 +6,8 @@ export async function GET(request, { params }) {
   const { id } = await params;
 
   try {
-    const res = await fetch(`${BACKEND}/published/${id}`, {
+    const backend = getBackendUrl();
+    const res = await fetch(`${backend}/published/${id}`, {
       cache: 'no-store',
       headers: { 'ngrok-skip-browser-warning': 'true' },
     });

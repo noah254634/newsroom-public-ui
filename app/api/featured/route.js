@@ -4,21 +4,22 @@
  */
 
 import { NextResponse } from 'next/server';
-
-const BACKEND = process.env.BACKEND_API_URL || 'http://127.0.0.1:8000/api';
+import { getBackendUrl } from '../../../lib/api';
 
 export async function GET() {
   try {
-    const res = await fetch(`${BACKEND}/published/featured`, {
+    const backend = getBackendUrl();
+    const res = await fetch(`${backend}/published/featured`, {
       headers: { 'ngrok-skip-browser-warning': 'true' },
       next: { revalidate: 15 },
       signal: AbortSignal.timeout(5000),
     });
-    if (!res.ok) return NextResponse.json([], { status: res.status });
-    const data = await res.json();
-    return NextResponse.json(data);
+    if (res.ok) {
+      const data = await res.json();
+      return NextResponse.json(data);
+    }
   } catch (e) {
     console.error('[/api/featured] fetch failed:', e.message);
-    return NextResponse.json([]);
   }
+  return NextResponse.json([]);
 }

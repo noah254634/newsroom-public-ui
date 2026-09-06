@@ -1,11 +1,12 @@
-const BACKEND = process.env.BACKEND_API_URL || 'http://127.0.0.1:8000/api';
+import { getBackendUrl } from '../../../lib/api';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request) {
   try {
     const body = await request.json();
-    const res = await fetch(`${BACKEND}/knowledge/search`, {
+    const backend = getBackendUrl();
+    const res = await fetch(`${backend}/knowledge/search`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
