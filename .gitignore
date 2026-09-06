@@ -19,6 +19,7 @@ yarn-error.log*
 .env
 .env*.local
 .env.production
+!.env.example
 
 # IDEs and OS files
 .DS_Store

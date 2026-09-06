@@ -8,10 +8,12 @@
  */
 
 import { NextResponse } from 'next/server';
+import { getBackendUrl } from '../../../lib/api';
 
-const BACKEND_BASE = process.env.BACKEND_API_URL
-  ? process.env.BACKEND_API_URL.replace('/api', '')
-  : 'http://127.0.0.1:8000';
+function getBackendBaseUrl() {
+  const apiUrl = getBackendUrl();
+  return apiUrl.replace(/\/api\/?$/, '');
+}
 
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
