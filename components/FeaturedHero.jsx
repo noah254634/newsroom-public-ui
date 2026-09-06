@@ -10,6 +10,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
 import { resolveImageUrl } from '../lib/imageUtils';
+import { getBackendUrl } from '../lib/api';
 
 const ROTATION_MS = 7000;
 const POLL_MS     = 30000;
@@ -225,14 +226,38 @@ export default function FeaturedHero({ fallback }) {
 
   const fetchFeatured = useCallback(async () => {
     try {
+      // 1. Try local /api/featured proxy route first
       const res = await fetch('/api/featured', { cache: 'no-store' });
-      if (res.ok) setFeatured(await res.json());
-      else setFeatured([]);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data) && data.length > 0) {
+          setFeatured(data);
+          setLoading(false);
+          return;
+        }
+      }
     } catch {
-      setFeatured([]);
-    } finally {
-      setLoading(false);
+      // proxy failed, proceed to direct fallback
     }
+
+    // 2. Direct backend fallback for client components
+    try {
+      const backend = getBackendUrl();
+      const directRes = await fetch(`${backend}/published/featured`, {
+        headers: { 'ngrok-skip-browser-warning': 'true' },
+        cache: 'no-store',
+      });
+      if (directRes.ok) {
+        setFeatured(await directRes.json());
+        setLoading(false);
+        return;
+      }
+    } catch {
+      // direct backend fetch failed
+    }
+
+    setFeatured([]);
+    setLoading(false);
   }, []);
 
   useEffect(() => {
